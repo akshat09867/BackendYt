@@ -13,3 +13,4 @@ const registration=asynchan(async(req,res)=>{
         send res    
     */ 
 }  )
+export {registration}
