@@ -22,7 +22,7 @@ const usersch=new Schema({
     coverimage:{
         type:string,
     },
-    watchHistory:{
+    watchhistory:{
         type:Schema.Types.ObjectId,
         ref:"Video",
     },
