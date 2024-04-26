@@ -5,7 +5,7 @@ cloudinary.config({
   api_key: process.env.api_key, 
   api_secret: process.env.api_secret 
 });
-const uploadcloudinary=async(localfilepath)=>{
+export const uploadcloudinary=async(localfilepath)=>{
     try {
         if(!localfilepath) return null
        const instanceu= await cloudinary.uploader.upload(localfilepath,{

@@ -31,8 +31,11 @@ const usersch=new Schema({
     email:{
         type:string,
         required:true
+    },
+    refreshtoken:{
+        type:string,
+        required:true
     }
-
 },{timestamps:true})
 usersch.pre("save",async function(next){
     if(!this.isModified) return next;
