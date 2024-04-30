@@ -5,7 +5,7 @@ class apires{
         ){
             this.statuscode=statuscode
             this.data=data
-            success=statuscode<400
+            this.success=statuscode<400
             this.message=message
         }
 }

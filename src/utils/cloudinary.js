@@ -5,12 +5,12 @@ cloudinary.config({
   api_key: process.env.api_key, 
   api_secret: process.env.api_secret 
 });
-export const uploadcloudinary=async(localfilepath)=>{
+ const uploadcloudinary=async(localfilepath)=>{
     try {
         if(!localfilepath) return null
        const instanceu= await cloudinary.uploader.upload(localfilepath,{
-        resource_type:"auto"
-       })
+        resource_type: "auto"
+           })
        fs.unlinkSync(localfilepath)
        return instanceu
     } catch (error) {
@@ -19,3 +19,4 @@ export const uploadcloudinary=async(localfilepath)=>{
         return null
     }
 }
+export {uploadcloudinary}

@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 const videosch=new mongoose.Schema({
     videofile:{
-        type:string,
+        type:String,
         required:true
     },
     thumbnail:{
-        type:string,
+        type:String,
         required:true
     },
     owner:{
@@ -13,11 +13,11 @@ const videosch=new mongoose.Schema({
         ref:"User"
     },
     description:{
-        type:string,
+        type:String,
         required:true
     },
     duration:{
-        type:string,
+        type:String,
         required:true
     },
     views:{
@@ -26,7 +26,7 @@ const videosch=new mongoose.Schema({
         required:true
     },
     title:{
-        type:string,
+        type:String,
         required:true
     },
     isPublished:{

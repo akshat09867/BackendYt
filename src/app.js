@@ -10,6 +10,6 @@ credentials:true
 app.use(express.json({limit:"20kb"}))
 app.use(express.urlencoded({extended:true,limit:"20kb"}))
 app.use(express.static("public"))
-import { router } from './routes/user.route.js'
-app.use("./api/v1/users",router)
+import userroute  from './routes/user.route.js'
+app.use("/api/v1/users",userroute)
 export {app}

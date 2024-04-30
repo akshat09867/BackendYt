@@ -1,7 +1,7 @@
 import mongoose,{Schema} from "mongoose";
 const comsch=new Schema({
     content:{
-        type:string,
+        type:String,
         required:true
     },
     video:{

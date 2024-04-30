@@ -3,38 +3,37 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 const usersch=new Schema({
     username:{
-        type:string,
+        type:String,
         required:true,
         trim:true,
     },
     fullname:{
-        type:string,
+        type:String,
         required:true,
         trim:true,
     },
     password:{
-        type:string,
+        type:String,
         required:[true,"password is required"],
         trim:true,
     },
     avatar:{
-        type:string,
+        type:String,
         required:true,
     },
     coverimage:{
-        type:string,
+        type:String,
     },
     watchhistory:{
         type:Schema.Types.ObjectId,
         ref:"Video",
     },
     email:{
-        type:string,
+        type:String,
         required:true
     },
     refreshtoken:{
-        type:string,
-        required:true
+        type:String
     }
 },{timestamps:true})
 usersch.pre("save",async function(next){
@@ -48,7 +47,8 @@ usersch.methods.generateaccesstoken=function(){
    return  jwt.sign({
     _id: this._id,
     username:this.username,
-    email:this.email},
+    email:this.email,
+fullname:this.fullname},
     process.env.accesssecret,
     {
         expiresIn:process.env.accesse
@@ -56,7 +56,8 @@ usersch.methods.generateaccesstoken=function(){
 }
 usersch.methods.generaterefreshtoken= function(){
   return jwt.sign({
-    _id:this. _id},
+    _id:this._id
+},
     process.env.refreshsecret,
     {
         expiresIn:process.env.refreshe
