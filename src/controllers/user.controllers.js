@@ -126,10 +126,10 @@ const refreshaccesstoken=asynchan(async(req,res)=>{
     
 })
 const newpass=asynchan(async(req,res)=>{
-    const {oldpassword,newpassword,confirmpassword}=req.body
+    const {password,newpassword,confirmpassword}=req.body
     if(newpassword!==confirmpassword) throw new apierr(403,"pass dosen't match")
     const user=await User.findById(req.user?._id)
-   const checking= await user.passcorrect(oldpassword)
+   const checking=await  user.passcorrect(password)
    console.log(checking);
    if(!checking) throw new apierr(500,"invalid password")
    user.password=newpassword
