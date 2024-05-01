@@ -67,11 +67,12 @@ return res
 })
 const login=asynchan(async(req,res)=>{
     const {username,email,password}=req.body
+    if(!(username||email)) throw new apierr(302,"one of them is required")
   const user=await User.findOne({
     $or:[{username},{email}]
 })
 if(!user) throw new apierr(402,"user not found")
- const checkpass= user.passcorrect(password)
+ const checkpass=await user.passcorrect(password)
  if(!checkpass) throw new apierr(300,"password is wrong")
  const {accesst,refresht}=await genaccessandrefresht(user._id)
 
@@ -104,32 +105,32 @@ const logout=asynchan(async(req,res)=>{
    )
 })
 const refreshaccesstoken=asynchan(async(req,res)=>{
-    // console.log(req.cookies);
-
-    const incomingtoken=req.cookies?.refresht 
-    const decodedtoken=jwt.verify(incomingtoken,process.env.refreshsecret)
-   const user=await User.findById(decodedtoken?._id)
-   console.log(user._id);
- 
-const options={
-    httpOnly:true,
-    secure:true
-}
-const {access,refresh}=await genaccessandrefresht(user._id)
-console.log(access);
-return res
-.status(200)
-.cookie("accesstoken",access,options)
-.cookie("refreshtoken",refresh,options)
-.json(
-    new apires(200,{accesstoken:access,refreshtoken:refresh},"access token refreshed")
-)
+    
+        const incomingtoken=req.cookies?.refresht 
+        const decodedtoken=jwt.verify(incomingtoken,process.env.refreshsecret)
+        console.log(decodedtoken);
+       const user=await User.findById(decodedtoken?._id)
+    const options={
+        httpOnly:true,
+        secure:true
+    }
+    console.log(user._id);
+    const {access,refresh}=await genaccessandrefresht(user._id)
+    return res
+    .status(200)
+    .cookie("accesst",access,options)
+    .cookie("refresht",refresh,options)
+    .json(
+        new apires(200,{accesstoken:access,refreshtoken:refresh},"access token refreshed")
+    )
+    
 })
 const newpass=asynchan(async(req,res)=>{
-    const {password,newpassword,confirmpassword}=req.body
+    const {oldpassword,newpassword,confirmpassword}=req.body
     if(newpassword!==confirmpassword) throw new apierr(403,"pass dosen't match")
-    const user=await User.findById(req.user._id)
-   const checking= await user.passcorrect(password)
+    const user=await User.findById(req.user?._id)
+   const checking= await user.passcorrect(oldpassword)
+   console.log(checking);
    if(!checking) throw new apierr(500,"invalid password")
    user.password=newpassword
 await user.save({validateBeforeSave:false})
@@ -212,7 +213,7 @@ const getuserprofile=asynchan(async(req,res)=>{
                     },
                     isSubscribed:{
                         $cond:{
-                            if:{$in:[req.user._id,"subscribers.subscriber"]},
+                            if:{$in:[req.user._id,"$subscribers.subscriber"]},
                             then:true,
                             else:false
                         }
@@ -224,7 +225,7 @@ const getuserprofile=asynchan(async(req,res)=>{
                 }
             }]
         )
-        if(!channel.length()) throw new apierr(401,"channel not found")
+        if(!channel.length) throw new apierr(401,"channel not found")
         return res
     .status(200)
     .json(200,channel[0],"user details fetched succesfully")
@@ -247,14 +248,15 @@ const watchHistory=asynchan(async(req,res)=>{
                         foreignField:"_id",
                         localField:"owner",
                         as:"owner"
-                    },
-                    pipieline:[
+                    ,
+                    pipeline:[
                         {
                             $project:{
                                 fullname:1,username:1,avatar:1
                             }
                         }
                     ]
+                }
                 },
                 {
                     $addFields:{

@@ -40,9 +40,15 @@ usersch.pre("save",async function(next){
     if(!this.isModified) return next;
     this.password=await bcrypt.hash(this.password,10)
 })
-usersch.methods.passcorrect=async function(password){
-    return await bcrypt.compare(this.password,password)
+usersch.methods.passcorrect = async function(password) {
+    try {
+        return await bcrypt.compare(password, this.password);
+    } catch (error) {
+        console.error("Error comparing passwords:", error);
+        return false; 
+    }
 }
+
 usersch.methods.generateaccesstoken=function(){
    return  jwt.sign({
     _id: this._id,

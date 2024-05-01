@@ -5,6 +5,7 @@ import { User } from '../models/user.model.js'
 export const verifyjwt=asynchan(async(req,res,next)=>{
     try {
         const token=req.cookies?.accesst ||  req.header("Authorization")?.replace("Bearer ", "")
+        if(!token) throw new apierr(400,"unauthorized request")
         const decodedtoken=jwt.verify(token,process.env.accesssecret)
         if(!decodedtoken) throw new apierr(401,"invalid access token")
         const user=await User.findById(decodedtoken._id).select("-password -refreshtoken")

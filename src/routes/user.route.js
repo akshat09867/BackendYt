@@ -21,12 +21,11 @@ router.route("/login").post(login)
 router.route("/logout").get(verifyjwt,logout)
 router.route("/refresh").get(refreshaccesstoken)
 router.route("/newpass").post(verifyjwt,newpass)
-router.route("/newpass").post(verifyjwt,getcurrentuser)
-router.route("/newpass").patch(verifyjwt,updateAccountDetails)
-router.route("/newpass").patch(verifyjwt,updateavatar)
-router.route("/newpass").patch(verifyjwt,updatecoveri)
-router.route("/newpass").get(verifyjwt,getuserprofile)
-router.route("/newpass").get(verifyjwt,watchHistory)
+router.route("/getcurrentuser").post(verifyjwt,getcurrentuser)
+router.route("/updateAccountDetails").patch(verifyjwt,updateAccountDetails)
+router.route("/updateavatar").patch(verifyjwt,updateavatar)
+router.route("/c/:username").get(verifyjwt,getuserprofile)
+router.route("/watchHistory").get(verifyjwt,watchHistory)
 
 
 export default router
