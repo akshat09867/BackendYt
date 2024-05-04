@@ -1,7 +1,7 @@
 import {asychan} from "../utils/asynchandler.js"
-import {Comment} from "../models/comments.model.js"
 import {apierr} from "../utils/apierr.js"
 import {apires} from "../utils/apires.js"
+import {Comment} from "../models/comments.model.js"
 const getcomment=asychan(async(req,res)=>{
     const {videoId}=req.params
     const {page=1,limit=9}=req.query
