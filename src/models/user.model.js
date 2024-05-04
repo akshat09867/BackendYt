@@ -6,6 +6,7 @@ const usersch=new Schema({
         type:String,
         required:true,
         trim:true,
+        unique:true
     },
     fullname:{
         type:String,
@@ -30,7 +31,9 @@ const usersch=new Schema({
     },
     email:{
         type:String,
-        required:true
+        required:true,
+        unique:true
+
     },
     refreshtoken:{
         type:String

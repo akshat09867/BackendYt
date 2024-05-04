@@ -12,7 +12,7 @@ export const verifyjwt=asynchan(async(req,res,next)=>{
         req.user=user
         next()
     } catch (error) {
-        console.log(error);
+        console.log(error);        
         throw new apierr(400,"decoded token error")
     }
 
