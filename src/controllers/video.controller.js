@@ -6,7 +6,28 @@ import {apierr} from "../utils/apierr.js"
 import {uploadcloudinary} from "../utils/cloudinary.js"
 import {apires} from "../utils/apires.js"
 const getallvideos=asynchan(async(req,res)=>{
-
+    const {page=1,limit=10,sortBy,sortType,query,userid}=req.query
+    const filter={}
+    if(query){
+        filter={
+            $or:[
+               {title:{$regrex:query,$options:'i'}} ,
+               {description:{$regrex:query,$options:'i'}}
+            ]
+        }
+    }
+    if(userid) filter.userid=userid
+    let sort={}
+    if(sortBy){
+        sort[sortBy]=sortType==='des'?-1:1
+    } 
+    const video=await Video.find({filter})
+    .sort(sort)
+    .skip((page-1)*limit)
+    .limit(limit)
+    return res
+    .status(200)
+    .json(new apires(200,video,"fetched video"))
 })
 const publishAVideo = asynchan(async (req, res) => {
     const { title, description} = req.body
@@ -57,3 +78,13 @@ const delvideo=asynchan(async(req,res)=>{
     .status(200)
     .json(200,"video deleted")
 })
+const togglepublishvideo=asynchan(async(req,res)=>{
+    const {videoId}=req.params
+    const video=await Video.findById(videoId)
+    video.isPublished=!video.isPublished
+    await video.save()
+    return res
+    .status(200)
+    .json(new apires(200,video,"toggled published video"))
+})
+export {getallvideos, publishAVideo, getVideoById,updatevideo,delvideo,togglepublishvideo}
